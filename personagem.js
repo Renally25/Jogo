@@ -2,8 +2,8 @@ class Personagem extends Entidade {
   constructor(x, y, largura, altura, spriteSheet = null, frames = []) {
     super(x, y, largura, altura);
     this.vy = 0;
-    this.gravidade = 1;
-    this.forcaDoPulo = -15;
+    this.gravidade = 1.5;
+    this.forcaDoPulo = -18;
     this.noChao = false;
     this.velocidadeX = 0;
     this.velocidadeMovimento = 5;
@@ -91,52 +91,33 @@ verificarPlataformas(plataformas) {
   this.vy += this.gravidade;
   this.noChao = false;
 
-  // Aplicar movimento vertical primeiro
+  // Aplicar movimento vertical
   this.y += this.vy;
 
-  // Verificar colisão com cada plataforma
+  // Verificar colisão com plataformas
   for (let plataforma of plataformas) {
-    // Verificar se está dentro da plataforma no eixo X
-    let dentroX = this.x + this.largura > plataforma.x &&
-                  this.x < plataforma.x + plataforma.w;
+    // Calcular o ponto central do personagem (metade da largura)
+    let centroPersonagemX = this.x + (this.largura / 2);
     
-    // Verificar se está colidindo no eixo Y (pés do personagem com topo da plataforma)
-    let colidindoY = this.y + this.altura > plataforma.y &&
-                     this.y < plataforma.y + plataforma.h;
+    // Verificar se o CENTRO do personagem está sobre a plataforma no eixo X
+    let centroSobrePlataforma = centroPersonagemX > plataforma.x &&
+                               centroPersonagemX < plataforma.x + plataforma.w;
+    
+    // Verificar se os pés estão colidindo com o topo da plataforma
+    let pesNoTopo = this.y + this.altura >= plataforma.y &&
+                    this.y + this.altura <= plataforma.y + 10; // 10px de tolerância
 
-    if (dentroX && colidindoY) {
-      // Se estava caindo e colidiu com o topo da plataforma
-      if (this.vy > 0 && this.y + this.altura - this.vy <= plataforma.y) {
-        // Ajustar posição para ficar em cima da plataforma
-        this.y = plataforma.y - this.altura;
-        this.vy = 0;
-        this.noChao = true;
-        break;
-      }
-      // Se estava subindo e colidiu com o fundo da plataforma
-      else if (this.vy < 0 && this.y - this.vy >= plataforma.y + plataforma.h) {
-        this.y = plataforma.y + plataforma.h;
-        this.vy = 0;
-      }
+    if (centroSobrePlataforma && pesNoTopo) {
+      // Colisão detectada - ajustar posição
+      this.y = plataforma.y - this.altura;
+      this.vy = 0;
+      this.noChao = true;
+      break;
     }
   }
 
   // Verificar se caiu da tela (morreu)
   if (this.y > height) {
-    this.morrer();
-    return;
-  }
-
-  // Verificar se está muito abaixo da plataforma mais baixa
-  let plataformaMaisBaixa = 0;
-  for (let plataforma of plataformas) {
-    if (plataforma.y > plataformaMaisBaixa) {
-      plataformaMaisBaixa = plataforma.y;
-    }
-  }
-  
-  // Se estiver muito abaixo da plataforma mais baixa, morre
-  if (this.y > plataformaMaisBaixa + 200) {
     this.morrer();
   }
 }
