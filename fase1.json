@@ -1,0 +1,20 @@
+{
+    "Plataforma": [
+    {
+     "x": -50,
+      "y": 350,
+      "largura": 390,
+      "img": "/sptite_fundo/plat-removebg-preview.png"  
+    }
+],
+
+"Fundo": [
+    {
+      "x": 0,
+      "y": 0,
+      "largura": 400,
+      "altura": 400, 
+      "img": "/sptite_fundo/nebulosa.png"
+    }
+]
+}
