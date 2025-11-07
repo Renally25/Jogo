@@ -33,31 +33,53 @@ class Jogo {
     };
   }
 
-  atualizar() {
-    if (this.estado !== 'jogando') return;
+ atualizar() {
+  if (this.estado !== 'jogando') return;
 
-    // Mover plataformas
+  // Mover plataformas
+  for (let plataforma of this.plataformas) {
+    plataforma.mover();
+  }
+
+  // Atualizar personagem
+  this.personagem.atualizar(this.plataformas);
+
+  // Verificação EXTRA: se personagem está sem plataforma e caindo
+  if (!this.personagem.noChao && this.personagem.vy > 0) {
+    let personagemNaPlataforma = false;
+    
     for (let plataforma of this.plataformas) {
-      plataforma.mover();
-    }
-
-    // Atualizar personagem (a morte é verificada dentro desta função)
-    this.personagem.atualizar(this.plataformas);
-
-    // Verificar se personagem caiu da plataforma principal
-    if (this.personagem.y > height + 100) {
-      this.estado = 'gameover';
-    }
-
-    // Atualizar obstáculos
-    for (let obstaculo of this.obstaculos) {
-      obstaculo.mover(this.velocidadeObstaculo);
-
-      if (this.personagem.colideCom(obstaculo)) {
-        this.estado = 'gameover';
+      let dentroX = this.personagem.x + this.personagem.largura > plataforma.x &&
+                    this.personagem.x < plataforma.x + plataforma.w;
+      
+      let acimaDaPlataforma = this.personagem.y + this.personagem.altura <= plataforma.y &&
+                              this.personagem.y + this.personagem.altura + 5 >= plataforma.y;
+      
+      if (dentroX && acimaDaPlataforma) {
+        personagemNaPlataforma = true;
+        break;
       }
     }
+    
+    // Se não está em nenhuma plataforma e está caindo, continua caindo
+    if (!personagemNaPlataforma) {
+      // A gravidade já está sendo aplicada, só garantir que continua
+    }
   }
+
+  // Verificar se personagem caiu completamente da tela
+  if (this.personagem.y > height + 100) {
+    this.estado = 'gameover';
+  }
+
+  // Atualizar obstáculos
+  for (let obstaculo of this.obstaculos) {
+    obstaculo.mover(this.velocidadeObstaculo);
+    if (this.personagem.colideCom(obstaculo)) {
+      this.estado = 'gameover';
+    }
+  }
+}
 
   desenhar() {
     // O fundo já foi desenhado no sketch.draw()
