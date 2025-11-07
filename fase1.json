@@ -1,10 +1,22 @@
 {
     "Plataforma": [
     {
-     "x": -50,
-      "y": 350,
-      "largura": 390,
+     "x": 0,
+      "y": 300,
+      "largura": 500,
       "img": "/sptite_fundo/plat-removebg-preview.png"  
+    },
+    {
+      "x": 140,
+      "y": 300,
+      "largura": 390,
+      "img": "/sptite_fundo/plat-removebg-preview.png"   
+    },
+     {
+      "x": 270,
+      "y": 300,
+      "largura": 390,
+      "img": "/sptite_fundo/plat-removebg-preview.png"   
     }
 ],
 
