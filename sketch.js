@@ -102,7 +102,7 @@ function inicializarJogo() {
       );
 
       let plataforma = new Plataforma(p.x, p.y, p.largura, p.altura || 50, platImgFundo);
-      plataforma.velocidade = 2;
+      plataforma.velocidade = 3;
       jogo.plataformas.push(plataforma);
     }
   }
