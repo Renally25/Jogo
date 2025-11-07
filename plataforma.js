@@ -5,17 +5,25 @@ class Plataforma {
     this.w = w;
     this.h = h;
     this.imgFundo = imgFundo;
-    this.velocidade = 2; // Velocidade padrão
+    this.velocidade = 3;
   }
   
   mostrar() {
     if (this.imgFundo && this.imgFundo.img) {
-      // Usar a imagem do fundo para desenhar
       image(this.imgFundo.img, this.x, this.y, this.w, this.h);
     } else {
-      // Fallback: plataforma colorida para debug
-      fill(100, 200, 100, 150);
+      fill(100, 200, 100);
       rect(this.x, this.y, this.w, this.h);
+    }
+  }
+
+  mover() {
+    this.x -= this.velocidade;
+    
+    // Se sair completamente da tela, pode ser reposicionada
+    if (this.x + this.w < -100) {
+      // Aqui você pode adicionar lógica para reposicionar a plataforma
+      // this.x = width + random(100, 300);
     }
   }
   
@@ -24,14 +32,5 @@ class Plataforma {
            personagem.x + personagem.largura > this.x &&
            personagem.y < this.y + this.h &&
            personagem.y + personagem.altura > this.y;
-  }
-
-  mover() {
-    this.x -= this.velocidade;
-    
-    // Se sair da tela, reposiciona à direita
-    if (this.x + this.w < 0) {
-      this.x = width;
-    }
   }
 }
